@@ -1,5 +1,6 @@
 package br.com.vinirib.pact.consumer.client.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -16,6 +17,8 @@ import java.util.Collections;
 @EnableSwagger2
 public class ApiConfig {
 
+    @Value("${info.build.version}")
+    private String buildVersion;
     /**
      * To add more features visit
      * https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
@@ -34,7 +37,7 @@ public class ApiConfig {
         return new ApiInfo(
                 "Client API",
                 "Client detail from Account of an bank API Made by Vinicius Ribeiro.",
-                "API TOS",
+                buildVersion,
                 "Terms of service",
                 new Contact("Vinícius Ribeiro", "https://github.com/vinirib",
                         "viniciusribeirosp@gmail.com"),

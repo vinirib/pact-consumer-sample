@@ -9,14 +9,19 @@ import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import br.com.vinirib.pact.consumer.client.dto.BalanceDTO;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
+import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.zalando.gson.money.MoneyTypeAdapterFactory;
 
+import javax.money.Monetary;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +40,11 @@ public class AccountPactTest {
             "Content-Type", "application/json"
     });
 
-    private Gson gson = new Gson();
+    private Gson gson = new GsonBuilder()
+            .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
+            .registerTypeAdapterFactory(new MoneyTypeAdapterFactory())
+            .serializeNulls()
+            .create();
 
     @Pact(provider = "AccountBalanceProvider", consumer = "AccountBalanceConsumer")
     public RequestResponsePact balanceEndpointTest(PactDslWithProvider builder) {
@@ -43,7 +52,11 @@ public class AccountPactTest {
         PactDslJsonBody bodyResponse = new PactDslJsonBody()
                 .integerType("accountId", 1)
                 .integerType("clientId", 1)
-                .numberValue("balance", 100.00);
+                .object("balance")
+                    .decimalType("amount", 100.00)
+                    .stringType("currency", "BRL")
+                .closeObject()
+                .object("");
 
         return builder
                 .given("get balance of accountId 1")
@@ -78,7 +91,8 @@ public class AccountPactTest {
                 .fromJson(IOUtils.toString(httpResponse.getEntity().getContent()), BalanceDTO.class);
         assertThat(balanceDTO.getAccountId(), is(1));
         assertThat(balanceDTO.getClientId(), is(1));
-        assertThat(balanceDTO.getBalance(), is(new BigDecimal("100")));
+        assertThat(balanceDTO.getBalance(), is(Money.of(100.00,
+                Monetary.getCurrency("BRL"))));
     }
 
     @Test

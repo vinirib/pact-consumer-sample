@@ -5,6 +5,7 @@ import br.com.vinirib.pact.consumer.client.dto.BalanceDTO;
 import br.com.vinirib.pact.consumer.client.entity.Client;
 import br.com.vinirib.pact.consumer.client.service.ClientService;
 import br.com.vinirib.pact.consumer.client.stub.ClientStub;
+import com.google.gson.Gson;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,6 +37,9 @@ class ClientResourceEndpointTest {
 
     @Autowired
     private ClientStub clientStub;
+
+    @Autowired
+    private Gson gson;
 
     private double MAX_BALANCE = 29999.00;
     private double MIN_BALANCE = -100.00;
@@ -98,12 +101,7 @@ class ClientResourceEndpointTest {
         when(clientService.getBalance(anyInt())).thenReturn(Optional.of(balanceDTO));
         mockMvc.perform(get("/v1/clients/balance/1"))
                 .andDo(print())
-                .andExpect(jsonPath("$.clientId").exists())
-                .andExpect(jsonPath("$.accountId").exists())
-                .andExpect(jsonPath("$.balance").exists())
-                .andExpect(jsonPath("$.clientId").value(balanceDTO.getClientId()))
-                .andExpect(jsonPath("$.accountId").value(balanceDTO.getAccountId()))
-                .andExpect(jsonPath("$.balance").value(balanceDTO.getBalance()))
+                .andExpect(content().json(gson.toJson(balanceDTO)))
                 .andExpect(status().isOk());
     }
 

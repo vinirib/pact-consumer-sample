@@ -4,6 +4,7 @@ pipeline {
   environment {
       BRANCH_NAME=env.GIT_BRANCH.replace("origin/", "")
   }
+  stages {
     stage('Can-I-Deploy Integration Check') {
       steps {
         sh 'curl -LO https://github.com/pact-foundation/pact-ruby-standalone/releases/download/v1.83.0/pact-1.83.0-linux-x86_64.tar.gz'
@@ -21,4 +22,5 @@ pipeline {
         echo 'Deploying to prod now...'
       }
     }
+  }
 }

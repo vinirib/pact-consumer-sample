@@ -1,0 +1,15 @@
+#!groovy
+pipeline {
+  agent any
+  environment {
+      BRANCH_NAME=env.GIT_BRANCH.replace("origin/", "")
+  }
+  stages {
+    stage('Build and Publish Pacts') {
+      steps {
+        sh "chmod +x mvnw"
+        sh './mvnw clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=${BRANCH_NAME}'
+      }
+    }
+  }
+}

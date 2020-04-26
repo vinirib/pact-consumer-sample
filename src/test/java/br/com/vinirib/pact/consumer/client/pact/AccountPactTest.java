@@ -1,6 +1,7 @@
 package br.com.vinirib.pact.consumer.client.pact;
 
 import au.com.dius.pact.consumer.MockServer;
+import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
@@ -22,7 +23,6 @@ import org.zalando.gson.money.MoneyTypeAdapterFactory;
 import javax.money.Monetary;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,11 +36,11 @@ public class AccountPactTest {
 
     private static final String BALANCE_URL_WORKING = "/v1/accounts/balance/1";
     private static final String BALANCE_URL_NOT_WORKING = "/v1/accounts/balance/1000";
-    private Map<String, String> headers = MapUtils.putAll(new HashMap<>(), new String[] {
+    private final Map<String, String> headers = MapUtils.putAll(new HashMap<>(), new String[]{
             "Content-Type", "application/json"
     });
 
-    private Gson gson = new GsonBuilder()
+    private final Gson gson = new GsonBuilder()
             .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
             .registerTypeAdapterFactory(new MoneyTypeAdapterFactory())
             .serializeNulls()
@@ -49,18 +49,17 @@ public class AccountPactTest {
     @Pact(provider = "AccountBalanceProvider", consumer = "AccountBalanceConsumer")
     public RequestResponsePact balanceEndpointTest(PactDslWithProvider builder) {
 
-        PactDslJsonBody bodyResponse = new PactDslJsonBody()
+        DslPart bodyResponse = new PactDslJsonBody()
                 .integerType("accountId", 1)
                 .integerType("clientId", 1)
                 .object("balance")
-                    .decimalType("amount", 100.00)
-                    .stringType("currency", "BRL")
-                .closeObject()
-                .object("");
+                .decimalType("amount", 100.00)
+                .stringType("currency", "BRL")
+                .closeObject();
 
         return builder
                 .given("get balance of accountId 1")
-                .uponReceiving("A request to " +BALANCE_URL_WORKING)
+                .uponReceiving("A request to " + BALANCE_URL_WORKING)
                 .path(BALANCE_URL_WORKING)
                 .method("GET")
                 .willRespondWith()
@@ -74,7 +73,7 @@ public class AccountPactTest {
     public RequestResponsePact balanceEndpointNotWorkingTest(PactDslWithProvider builder) {
         return builder
                 .given("No accounts exist from accountId 1000")
-                .uponReceiving("A request to " +BALANCE_URL_NOT_WORKING)
+                .uponReceiving("A request to " + BALANCE_URL_NOT_WORKING)
                 .path(BALANCE_URL_NOT_WORKING)
                 .method("GET")
                 .willRespondWith()

@@ -21,6 +21,4 @@ pipeline {
         echo 'Deploying to prod now...'
       }
     }
-  }
-
 }

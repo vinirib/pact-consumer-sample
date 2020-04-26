@@ -137,7 +137,6 @@
                     <pactBrokerUrl>http://pact_broker</pactBrokerUrl>
                     <pactDirectory>target/pacts</pactDirectory>
                     <trimSnapshot>true</trimSnapshot>
-                    <projectVersion>${project.version}</projectVersion>
                     <tags>
                         <tag>master</tag>
                     </tags>

@@ -12,4 +12,13 @@ pipeline {
       }
     }
   }
+
+ post {
+    success {
+        script {
+            echo "Contract Generated Successful, now trigger Provider check!"
+            build job: 'PACT-FLOW-PROVIDER-TEST-CONTRACT-client-api', propagate: true
+        }
+    }
+ }
 }

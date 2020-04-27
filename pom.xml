@@ -141,6 +141,10 @@
                     <pactBrokerUrl>http://pact_broker</pactBrokerUrl>
                     <pactDirectory>target/pacts</pactDirectory>
                     <trimSnapshot>true</trimSnapshot>
+                    <projectVersion>${pact.consumer.version}</projectVersion>
+                    <tags>
+                        <tag>${pact.tag}</tag>
+                    </tags>
                 </configuration>
             </plugin>
         </plugins>

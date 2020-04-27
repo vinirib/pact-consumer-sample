@@ -130,6 +130,10 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>au.com.dius</groupId>
                 <artifactId>pact-jvm-provider-maven</artifactId>
                 <version>4.0.6</version>
@@ -137,9 +141,6 @@
                     <pactBrokerUrl>http://pact_broker</pactBrokerUrl>
                     <pactDirectory>target/pacts</pactDirectory>
                     <trimSnapshot>true</trimSnapshot>
-                    <tags>
-                        <tag>master</tag>
-                    </tags>
                 </configuration>
             </plugin>
         </plugins>

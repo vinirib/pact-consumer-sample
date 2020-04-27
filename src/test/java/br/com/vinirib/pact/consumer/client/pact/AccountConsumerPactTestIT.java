@@ -31,8 +31,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @ExtendWith(PactConsumerTestExt.class)
-@PactTestFor(providerName = "AccountBalanceProvider", port = "1234")
-public class AccountPactTest {
+@PactTestFor(providerName = "AccountProvider", port = "1234")
+public class AccountConsumerPactTestIT {
 
     private static final String BALANCE_URL_WORKING = "/v1/accounts/balance/1";
     private static final String BALANCE_URL_NOT_WORKING = "/v1/accounts/balance/1000";
@@ -46,7 +46,7 @@ public class AccountPactTest {
             .serializeNulls()
             .create();
 
-    @Pact(provider = "AccountBalanceProvider", consumer = "AccountBalanceConsumer")
+    @Pact(provider = "AccountProvider", consumer = "ClientConsumer")
     public RequestResponsePact balanceEndpointTest(PactDslWithProvider builder) {
 
         DslPart bodyResponse = new PactDslJsonBody()
@@ -69,7 +69,7 @@ public class AccountPactTest {
                 .toPact();
     }
 
-    @Pact(provider = "AccountBalanceProvider", consumer = "AccountBalanceConsumer")
+    @Pact(provider = "AccountProvider", consumer = "ClientConsumer")
     public RequestResponsePact balanceEndpointNotWorkingTest(PactDslWithProvider builder) {
         return builder
                 .given("No accounts exist from accountId 1000")
@@ -82,7 +82,7 @@ public class AccountPactTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "balanceEndpointTest", providerName = "AccountBalanceProvider")
+    @PactTestFor(pactMethod = "balanceEndpointTest", providerName = "AccountProvider")
     void testBalanceWorking(MockServer mockServer) throws IOException {
         HttpResponse httpResponse = Request.Get(mockServer.getUrl() + BALANCE_URL_WORKING).execute().returnResponse();
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(200)));
@@ -95,7 +95,7 @@ public class AccountPactTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "balanceEndpointNotWorkingTest", providerName = "AccountBalanceProvider")
+    @PactTestFor(pactMethod = "balanceEndpointNotWorkingTest", providerName = "AccountProvider")
     void testBalanceNotWorking(MockServer mockServer) throws IOException {
         HttpResponse httpResponse = Request.Get(mockServer.getUrl() + BALANCE_URL_NOT_WORKING).execute().returnResponse();
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(404)));

@@ -8,7 +8,7 @@ pipeline {
     stage('Build and Publish Pacts') {
       steps {
         sh "chmod +x mvnw"
-        sh './mvnw clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=${BRANCH_NAME}'
+        sh './mvnw clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
       }
     }
   }

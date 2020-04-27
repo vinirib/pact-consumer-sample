@@ -17,7 +17,7 @@ pipeline {
     success {
         script {
             echo "Contract Generated Successful, now trigger Provider check!"
-            build job: 'PACT-FLOW-PROVIDER-TEST-CONTRACT-client-api', propagate: true
+            build job: '2-PACT-FLOW-PROVIDER-TEST-CONTRACT-client-api', propagate: true
         }
     }
  }

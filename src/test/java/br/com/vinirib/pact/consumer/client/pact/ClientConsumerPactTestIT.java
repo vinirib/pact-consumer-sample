@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.is;
 
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "AccountProvider", port = "1234")
-public class AccountConsumerPactTestIT {
+public class ClientConsumerPactTestIT {
 
     private static final String BALANCE_URL_WORKING = "/v1/accounts/balance/1";
     private static final String BALANCE_URL_NOT_WORKING = "/v1/accounts/balance/1000";

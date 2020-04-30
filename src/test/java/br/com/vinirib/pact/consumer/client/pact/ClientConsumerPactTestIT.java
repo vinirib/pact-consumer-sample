@@ -10,25 +10,20 @@ import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import br.com.vinirib.pact.consumer.client.dto.BalanceDTO;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
-import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.zalando.gson.money.MoneyTypeAdapterFactory;
 
-import javax.money.Monetary;
 import java.io.IOException;
-import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "AccountProvider", port = "1234")
@@ -40,25 +35,18 @@ public class ClientConsumerPactTestIT {
             "Content-Type", "application/json"
     });
 
-    private final Gson gson = new GsonBuilder()
-            .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
-            .registerTypeAdapterFactory(new MoneyTypeAdapterFactory())
-            .serializeNulls()
-            .create();
+    private final Gson gson = new Gson();
 
     @Pact(provider = "AccountProvider", consumer = "ClientConsumer")
     public RequestResponsePact balanceEndpointTest(PactDslWithProvider builder) {
 
-        DslPart bodyResponse = new PactDslJsonBody()
-                .integerType("accountId", 1)
-                .integerType("clientId", 1)
-                .object("balance")
-                .decimalType("amount", 100.00)
-                .stringType("currency", "BRL")
-                .closeObject();
+        PactDslJsonBody bodyResponse = new PactDslJsonBody()
+                .integerType("accountId")
+                .integerType("clientId")
+                .numberType("balance");
 
         return builder
-                .given("get balance of accountId 1")
+                .given("get balance of an account")
                 .uponReceiving("A request to " + BALANCE_URL_WORKING)
                 .path(BALANCE_URL_WORKING)
                 .method("GET")
@@ -88,10 +76,9 @@ public class ClientConsumerPactTestIT {
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(200)));
         final BalanceDTO balanceDTO = gson
                 .fromJson(IOUtils.toString(httpResponse.getEntity().getContent()), BalanceDTO.class);
-        assertThat(balanceDTO.getAccountId(), is(1));
-        assertThat(balanceDTO.getClientId(), is(1));
-        assertThat(balanceDTO.getBalance(), is(Money.of(100.00,
-                Monetary.getCurrency("BRL"))));
+        assertThat(balanceDTO.getAccountId(), is(notNullValue()));
+        assertThat(balanceDTO.getClientId(), is(notNullValue()));
+        assertThat(balanceDTO.getBalance(), is(notNullValue()));
     }
 
     @Test

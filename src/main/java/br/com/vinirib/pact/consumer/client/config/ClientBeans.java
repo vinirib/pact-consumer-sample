@@ -1,14 +1,13 @@
 package br.com.vinirib.pact.consumer.client.config;
 
 
-import com.fasterxml.jackson.databind.Module;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import org.zalando.gson.money.MoneyTypeAdapterFactory;
-import org.zalando.jackson.datatype.money.MoneyModule;
+import springfox.documentation.spring.web.json.Json;
 
 import java.lang.reflect.Modifier;
 
@@ -20,20 +19,23 @@ public class ClientBeans {
     public Gson gson() {
         return new GsonBuilder()
                 .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
-                .registerTypeAdapterFactory(new MoneyTypeAdapterFactory())
+                .registerTypeAdapter(Json.class, SpringfoxJsontoGsonAdapter.builder().build())
                 .serializeNulls()
                 .create();
     }
 
     @Bean
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
+    public GsonHttpMessageConverter gsonHttpMessageConverter() {
+        final GsonHttpMessageConverter gsonHttpMessageConverter = new GsonHttpMessageConverter();
+        gsonHttpMessageConverter.setGson(gson());
+        return gsonHttpMessageConverter;
     }
 
     @Bean
-    public Module moneyModule() {
-        return new MoneyModule()
-                .withMoney()
-                .withDefaultFormatting();
+    public RestTemplate getRestTemplate() {
+        final RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(gsonHttpMessageConverter());
+        return restTemplate;
     }
+
 }

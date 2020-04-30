@@ -1,13 +1,16 @@
 package br.com.vinirib.pact.consumer.client.config;
 
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -19,6 +22,7 @@ public class ApiConfig {
 
     @Value("${info.build.version}")
     private String buildVersion;
+
     /**
      * To add more features visit
      * https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
@@ -43,4 +47,5 @@ public class ApiConfig {
                         "viniciusribeirosp@gmail.com"),
                 "License of API", "API license URL", Collections.emptyList());
     }
+
 }

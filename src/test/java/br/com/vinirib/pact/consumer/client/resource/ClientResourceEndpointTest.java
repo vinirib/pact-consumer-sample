@@ -1,12 +1,11 @@
 package br.com.vinirib.pact.consumer.client.resource;
 
-import br.com.vinirib.pact.consumer.client.dto.ClientDetailsDTO;
 import br.com.vinirib.pact.consumer.client.dto.BalanceDTO;
+import br.com.vinirib.pact.consumer.client.dto.ClientDetailsDTO;
 import br.com.vinirib.pact.consumer.client.entity.Client;
 import br.com.vinirib.pact.consumer.client.service.ClientService;
 import br.com.vinirib.pact.consumer.client.stub.ClientStub;
 import com.google.gson.Gson;
-import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.money.Monetary;
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -41,8 +39,8 @@ class ClientResourceEndpointTest {
     @Autowired
     private Gson gson;
 
-    private double MAX_BALANCE = 29999.00;
-    private double MIN_BALANCE = -100.00;
+    private final double MAX_BALANCE = 29999.00;
+    private final double MIN_BALANCE = -100.00;
 
 
     @Test
@@ -108,8 +106,7 @@ class ClientResourceEndpointTest {
     private BalanceDTO buildBalanceDTO() {
         return BalanceDTO.builder()
                 .accountId(1)
-                .balance(Money.of(getRandomAmount(),
-                        Monetary.getCurrency("BRL")))
+                .balance(BigDecimal.valueOf(getRandomAmount()))
                 .clientId(10)
                 .build();
     }

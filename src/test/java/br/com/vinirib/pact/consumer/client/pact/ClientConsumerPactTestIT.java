@@ -43,7 +43,7 @@ public class ClientConsumerPactTestIT {
         PactDslJsonBody bodyResponse = new PactDslJsonBody()
                 .integerType("accountId")
                 .integerType("clientId")
-                .numberType("balance");
+                .numberType("value");
 
         return builder
                 .given("get balance of an account")
@@ -78,7 +78,7 @@ public class ClientConsumerPactTestIT {
                 .fromJson(IOUtils.toString(httpResponse.getEntity().getContent()), BalanceDTO.class);
         assertThat(balanceDTO.getAccountId(), is(notNullValue()));
         assertThat(balanceDTO.getClientId(), is(notNullValue()));
-        assertThat(balanceDTO.getBalance(), is(notNullValue()));
+        assertThat(balanceDTO.getValue(), is(notNullValue()));
     }
 
     @Test

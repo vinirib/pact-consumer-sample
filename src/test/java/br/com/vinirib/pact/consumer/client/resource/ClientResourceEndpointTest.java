@@ -106,7 +106,7 @@ class ClientResourceEndpointTest {
     private BalanceDTO buildBalanceDTO() {
         return BalanceDTO.builder()
                 .accountId(1)
-                .balance(BigDecimal.valueOf(getRandomAmount()))
+                .value(BigDecimal.valueOf(getRandomAmount()))
                 .clientId(10)
                 .build();
     }

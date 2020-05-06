@@ -23,7 +23,7 @@ pipeline {
     failure {
         script {
             echo "\n\nThere are some error on ${env.JOB_NAME} on branch ${env.GIT_BRANCH}" +
-                    "You can add some notice if you want, see this page to get an example\n" +
+                    " You can add some notice if you want, see this page to get an example\n" +
                     "https://www.jenkins.io/doc/pipeline/tour/post/"
         }
     }

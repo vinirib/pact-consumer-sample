@@ -14,6 +14,6 @@ public class BalanceDTO implements Serializable {
 
     private Integer clientId;
     private Integer accountId;
-    private BigDecimal balance;
+    private BigDecimal value;
 
 }

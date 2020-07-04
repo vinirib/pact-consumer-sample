@@ -75,7 +75,7 @@ public class ClientConsumerPactTestIT {
     @PactTestFor(pactMethod = "balanceEndpointTest", providerName = "AccountProvider")
     void testBalanceWorking(MockServer mockServer) throws IOException {
         HttpResponse httpResponse = Request.Get(mockServer.getUrl() + BALANCE_URL_WORKING).execute().returnResponse();
-        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(HttpMethod.GET.name())));
+        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(HttpStatus.OK.value())));
         final BalanceDTO balanceDTO = gson
                 .fromJson(IOUtils.toString(httpResponse.getEntity().getContent()), BalanceDTO.class);
         assertThat(balanceDTO.getAccountId(), is(notNullValue()));

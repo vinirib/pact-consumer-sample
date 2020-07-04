@@ -7,6 +7,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,16 +19,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/v1/clients")
 @Api(value = "Clients API", tags = {"Clients API"})
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ClientResourceEndpoint {
 
+    private static final Integer HTTP_STATUS_SUCCESSFUL = 200;
+    private static final Integer HTTP_STATUS_BAD_REQUEST = 404;
     private final ClientService clientService;
 
     @GetMapping("/{clientId}")
@@ -34,8 +35,8 @@ public class ClientResourceEndpoint {
             nickname = "getClientDetails",
             response = ClientDetailsDTO.class)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Client Returned", response = ClientDetailsDTO.class),
-            @ApiResponse(code = 404, message = "Client Not Found"),
+            @ApiResponse(code = HTTP_STATUS_SUCCESSFUL, message = "Client Returned", response = ClientDetailsDTO.class),
+            @ApiResponse(code = HTTP_STATUS_BAD_REQUEST, message = "Client Not Found"),
     })
     public ResponseEntity<ClientDetailsDTO> getClientDetails(@PathVariable("clientId") Integer clientId) {
         final Optional<ClientDetailsDTO> ClientDetailsDTO = clientService.getClientDetails(clientId);
@@ -52,8 +53,8 @@ public class ClientResourceEndpoint {
             nickname = "getClientDetails",
             response = ClientDetailsDTO.class)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Client Returned", response = ClientDetailsDTO.class),
-            @ApiResponse(code = 404, message = "Client Not Found"),
+            @ApiResponse(code = HTTP_STATUS_SUCCESSFUL, message = "Client Returned", response = ClientDetailsDTO.class),
+            @ApiResponse(code = HTTP_STATUS_BAD_REQUEST, message = "Client Not Found"),
     })
     public ResponseEntity<List<ClientDetailsDTO>> getAll() {
         final Optional<List<ClientDetailsDTO>> ClientDetailsDTO = clientService.getAll();
@@ -70,8 +71,8 @@ public class ClientResourceEndpoint {
             nickname = "getBalance",
             response = BalanceDTO.class)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Client Returned", response = BalanceDTO.class),
-            @ApiResponse(code = 404, message = "Client Not Found"),
+            @ApiResponse(code = HTTP_STATUS_SUCCESSFUL, message = "Client Returned", response = BalanceDTO.class),
+            @ApiResponse(code = HTTP_STATUS_BAD_REQUEST, message = "Client Not Found"),
     })
     public ResponseEntity<BalanceDTO> getBalance(@PathVariable("clientId") Integer clientId) {
         final Optional<BalanceDTO> balanceDTO = clientService.getBalance(clientId);

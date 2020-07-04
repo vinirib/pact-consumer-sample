@@ -6,12 +6,11 @@ import br.com.vinirib.pact.consumer.client.exception.ClientNotFoundException;
 import br.com.vinirib.pact.consumer.client.integration.account.service.AccountIntegrationService;
 import br.com.vinirib.pact.consumer.client.repository.ClientRepository;
 import br.com.vinirib.pact.consumer.client.service.ClientService;
+import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -38,7 +37,7 @@ public class ClientServiceImpl implements ClientService {
 
     private Integer getAccountId(Integer clientId) {
         return getClientDetails(clientId)
-                    .orElseThrow(() -> new ClientNotFoundException("Client with id: " + clientId + " not found!"))
-                    .getAccountId();
+                .orElseThrow(() -> new ClientNotFoundException("Client with id: " + clientId + " not found!"))
+                .getAccountId();
     }
 }

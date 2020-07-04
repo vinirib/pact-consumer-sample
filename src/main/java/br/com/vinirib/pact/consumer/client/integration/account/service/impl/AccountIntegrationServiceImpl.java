@@ -2,13 +2,12 @@ package br.com.vinirib.pact.consumer.client.integration.account.service.impl;
 
 import br.com.vinirib.pact.consumer.client.dto.BalanceDTO;
 import br.com.vinirib.pact.consumer.client.integration.account.service.AccountIntegrationService;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Optional;
 
 @Service
 public class AccountIntegrationServiceImpl implements AccountIntegrationService {

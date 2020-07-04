@@ -4,10 +4,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import java.lang.reflect.Type;
 import lombok.experimental.SuperBuilder;
 import springfox.documentation.spring.web.json.Json;
-
-import java.lang.reflect.Type;
 
 @SuperBuilder
 public class SpringfoxJsontoGsonAdapter implements JsonSerializer<Json> {

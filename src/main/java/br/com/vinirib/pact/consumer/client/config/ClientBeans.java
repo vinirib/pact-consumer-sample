@@ -3,13 +3,12 @@ package br.com.vinirib.pact.consumer.client.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.lang.reflect.Modifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.spring.web.json.Json;
-
-import java.lang.reflect.Modifier;
 
 
 @Configuration

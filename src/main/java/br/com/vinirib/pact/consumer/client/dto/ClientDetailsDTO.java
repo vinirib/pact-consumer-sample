@@ -1,10 +1,9 @@
 package br.com.vinirib.pact.consumer.client.dto;
 
 import br.com.vinirib.pact.consumer.client.entity.Client;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Objects;
 
 @Data
 @Builder

@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -49,10 +51,10 @@ public class ClientConsumerPactTestIT {
                 .given("get balance of an account")
                 .uponReceiving("A request to " + BALANCE_URL_WORKING)
                 .path(BALANCE_URL_WORKING)
-                .method("GET")
+                .method(HttpMethod.GET.name())
                 .willRespondWith()
                 .headers(headers)
-                .status(200)
+                .status(HttpStatus.OK.value())
                 .body(bodyResponse)
                 .toPact();
     }
@@ -63,9 +65,9 @@ public class ClientConsumerPactTestIT {
                 .given("No accounts exist from accountId 1000")
                 .uponReceiving("A request to " + BALANCE_URL_NOT_WORKING)
                 .path(BALANCE_URL_NOT_WORKING)
-                .method("GET")
+                .method(HttpMethod.GET.name())
                 .willRespondWith()
-                .status(404)
+                .status(HttpStatus.NOT_FOUND.value())
                 .toPact();
     }
 
@@ -73,7 +75,7 @@ public class ClientConsumerPactTestIT {
     @PactTestFor(pactMethod = "balanceEndpointTest", providerName = "AccountProvider")
     void testBalanceWorking(MockServer mockServer) throws IOException {
         HttpResponse httpResponse = Request.Get(mockServer.getUrl() + BALANCE_URL_WORKING).execute().returnResponse();
-        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(200)));
+        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(HttpMethod.GET.name())));
         final BalanceDTO balanceDTO = gson
                 .fromJson(IOUtils.toString(httpResponse.getEntity().getContent()), BalanceDTO.class);
         assertThat(balanceDTO.getAccountId(), is(notNullValue()));
@@ -85,7 +87,7 @@ public class ClientConsumerPactTestIT {
     @PactTestFor(pactMethod = "balanceEndpointNotWorkingTest", providerName = "AccountProvider")
     void testBalanceNotWorking(MockServer mockServer) throws IOException {
         HttpResponse httpResponse = Request.Get(mockServer.getUrl() + BALANCE_URL_NOT_WORKING).execute().returnResponse();
-        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(404)));
+        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(HttpStatus.NOT_FOUND.value())));
         assertThat(IOUtils.toString(httpResponse.getEntity().getContent()), is(equalTo("")));
     }
 

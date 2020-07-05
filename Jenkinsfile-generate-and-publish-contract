@@ -7,11 +7,12 @@ pipeline {
   stages {
     stage('Build and Publish Pacts') {
       agent {
-            docker { image 'adoptopenjdk:14-jdk-openj9-bionic' }
-      }
-      steps {
-        sh "chmod +x mvnw"
-        sh './mvnw clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
+            docker { image 'adoptopenjdk:14-jdk-openj9-bionic'
+                steps {
+                    sh "chmod +x mvnw"
+                    sh './mvnw clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
+                }
+            }
       }
     }
   }

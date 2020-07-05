@@ -1,6 +1,8 @@
 #!groovy
 pipeline {
-  agent any
+    agent {
+        docker { image 'adoptopenjdk:14-jdk-openj9-bionic' }
+    }
   environment {
       BRANCH_NAME=env.GIT_BRANCH.replace("origin/", "")
   }

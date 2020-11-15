@@ -1,6 +1,8 @@
 #!groovy
 pipeline {
-  agent any
+  agent {
+    docker { image 'maven:3.6-jdk-11-openj9' }
+  }
   environment {
       BRANCH_NAME=env.GIT_BRANCH.replace("origin/", "")
   }

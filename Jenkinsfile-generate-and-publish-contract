@@ -1,8 +1,6 @@
 #!groovy
 pipeline {
-    agent {
-        docker { image 'maven:3.6-jdk-11-openj9' }
-    }
+    agent any
     environment {
         BRANCH_NAME=env.GIT_BRANCH.replace("origin/", "")
         CI = 'true'
@@ -10,9 +8,11 @@ pipeline {
     stages {
         stage('Build and Publish Pacts') {
             steps {
-                sh 'apt-get -y install git'
-                sh 'git clone https://github.com/vinirib/pact-consumer-sample'
-                sh 'mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
+                script {
+                    docker.inside(image: 'maven:3.6-jdk-11-openj9') {
+                        sh 'mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
+                    }
+                }
             }
         }
     }

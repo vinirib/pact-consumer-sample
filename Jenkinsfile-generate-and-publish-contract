@@ -5,12 +5,14 @@ pipeline {
     }
     environment {
         BRANCH_NAME=env.GIT_BRANCH.replace("origin/", "")
+        CI = 'true'
     }
     stages {
         stage('Build and Publish Pacts') {
             steps {
-                sh "chmod +x mvnw"
-                sh './mvnw clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
+                sh 'apt-get -y install git'
+                sh 'git clone https://github.com/vinirib/pact-consumer-sample'
+                sh 'mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
             }
         }
     }

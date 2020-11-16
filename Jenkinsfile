@@ -15,8 +15,7 @@ pipeline {
     }
     stage('Publish Pacts') {
       steps {
-         sh "chmod +x mvnw"
-         sh './mvnw pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=${BRANCH_NAME}'
+         sh 'mvn pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=${BRANCH_NAME}'
       }
     }
     stage('Check Pact Verifications') {

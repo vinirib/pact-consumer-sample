@@ -10,6 +10,8 @@ pipeline {
                 docker {
                     image "maven:3.6-jdk-11-openj9"
                     reuseNode true
+                    alwaysPull false
+                    args "-u root"
                 }
             }
             steps {

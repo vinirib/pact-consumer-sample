@@ -8,6 +8,12 @@ pipeline {
     }
     stages {
         stage('Build and Publish Pacts') {
+            agent {
+                docker {
+                    image "maven:3.6-jdk-11-openj9"
+                    reuseNode true
+                }
+            }
             steps {
                 script {
                     sh 'mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'

@@ -6,16 +6,31 @@ pipeline {
   environment {
       BRANCH_NAME=env.GIT_BRANCH.replace("origin/", "")
   }
+
+  stages {
+    stage('Build and Publish Pacts') {
+      steps {
+        script {
+            sh 'mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
+          }
+        }
+      }
+    }
+
   stages {
     stage('Build') {
       steps {
-         sh "chmod +x mvnw"
-         sh './mvnw clean verify'
+        script {
+            sh "chmod +x mvnw"
+            sh './mvnw clean verify'
+        }
       }
     }
     stage('Publish Pacts') {
       steps {
-         sh 'mvn pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=${BRANCH_NAME}'
+        docker.inside(image: 'maven:3.6-jdk-11-openj9') {
+          sh 'mvn pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=${BRANCH_NAME}'
+        }
       }
     }
     stage('Check Pact Verifications') {

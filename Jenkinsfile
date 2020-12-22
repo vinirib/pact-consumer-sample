@@ -28,9 +28,7 @@ pipeline {
     }
     stage('Publish Pacts') {
       steps {
-        docker.inside(image: 'maven:3.6-jdk-11-openj9') {
           sh 'mvn pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=${BRANCH_NAME}'
-        }
       }
     }
     stage('Check Pact Verifications') {

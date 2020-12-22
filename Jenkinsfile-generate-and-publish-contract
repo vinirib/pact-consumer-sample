@@ -16,7 +16,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
+                    sh 'docker run mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
                 }
             }
         }

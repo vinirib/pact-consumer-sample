@@ -1,22 +1,16 @@
 #!groovy
 pipeline {
-    agent any
+    agent {
+        docker { image 'maven:3.6-jdk-11-openj9' }
+    }
     environment {
         BRANCH_NAME=env.GIT_BRANCH.replace("origin/", "")
     }
     stages {
         stage('Build and Publish Pacts') {
-            agent {
-                docker {
-                    image "maven:3.6-jdk-11-openj9"
-                    reuseNode true
-                    alwaysPull false
-                    args "-u root"
-                }
-            }
             steps {
                 script {
-                    sh 'docker run mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
+                    sh 'mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
                 }
             }
         }

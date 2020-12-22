@@ -9,9 +9,7 @@ pipeline {
     stages {
         stage('Build and Publish Pacts') {
             steps {
-                script {
-                    sh 'mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
-                }
+                sh 'mvn clean verify pact:publish -Dpact.consumer.version=${GIT_COMMIT} -Dpact.tag=CONTRACT-TEST'
             }
         }
     }

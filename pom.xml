@@ -156,7 +156,7 @@
                 <artifactId>pact-jvm-provider-maven_2.11</artifactId>
                 <version>3.5.24</version>
                 <configuration>
-                    <pactBrokerUrl>http://pact_broker</pactBrokerUrl>
+                    <pactBrokerUrl>http://172.20.1.5</pactBrokerUrl>
                     <pactDirectory>target/pacts</pactDirectory>
                     <trimSnapshot>true</trimSnapshot>
                     <projectVersion>${pact.consumer.version}</projectVersion>
